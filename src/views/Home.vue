@@ -19,13 +19,12 @@
       <el-container>
         <el-aside width="200px">
           <el-menu @select="menuClick">
-            <el-submenu index="1">
+            <el-submenu index="1" v-for="(item,index) in this.$router.options.routes" v-if="!item.hidden" :key="index">
               <template slot="title">
                 <i class="el-icon-location"></i>
-                <span>导航一</span>
+                <span>{{item.name}}</span>
               </template>
-              <el-menu-item index="/test1">选项1</el-menu-item>
-              <el-menu-item index="/test2">选项2</el-menu-item>
+              <el-menu-item :index="child.path" v-for="(child,indexj) in item.children" :key="indexj">{{child.name}}</el-menu-item>
             </el-submenu>
           </el-menu>
         </el-aside>
