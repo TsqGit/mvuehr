@@ -18,7 +18,7 @@
       </el-header>
       <el-container>
         <el-aside width="200px">
-          <el-menu @select="menuClick">
+          <el-menu router>
             <el-submenu index="1" v-for="(item,index) in this.$router.options.routes" v-if="!item.hidden" :key="index">
               <template slot="title">
                 <i class="el-icon-location"></i>
@@ -44,10 +44,6 @@ export default {
     };
   },
   methods: {
-    menuClick(index) {
-      // console.log(index)
-      this.$router.push(index)
-    },
     commandHandler(cmd) {
       if (cmd == "logout") {
         this.$confirm("此操作将注销登录, 是否继续?", "提示", {
