@@ -6,6 +6,9 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
 import {postKeyValueRequest, postRequest, getRequest, putRequest,deleteRequest} from './utils/api';
+import { initMenu } from './utils/menu';
+import 'font-awesome/css/font-awesome.min.css';
+
 Vue.prototype.postKeyValueRequest=postKeyValueRequest;
 Vue.prototype.postRequest=postRequest;
 Vue.prototype.getRequest=getRequest;
@@ -15,6 +18,15 @@ Vue.prototype.deleteRequest=deleteRequest;
 Vue.config.productionTip = false
 
 Vue.use(ElementUI);
+
+router.beforeEach((to,from,next) => {
+    if(to.path == '/') {
+      next();
+    } else {
+      initMenu(router,store);
+      next();
+    }
+})
 
 new Vue({
   router,
