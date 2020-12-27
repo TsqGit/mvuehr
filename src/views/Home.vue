@@ -19,17 +19,34 @@
       <el-container>
         <el-aside width="200px">
           <el-menu router>
-            <el-submenu :index="index + ''" v-for="(item,index) in routes" v-if="!item.hidden" :key="index">
+            <el-submenu
+              :index="index + ''"
+              v-for="(item, index) in routes"
+              v-if="!item.hidden"
+              :key="index"
+            >
               <template slot="title">
                 <i :class="item.iconCls"></i>
-                <span>{{item.name}}</span>
+                <span>{{ item.name }}</span>
               </template>
-              <el-menu-item :index="child.path" v-for="(child,indexj) in item.children" :key="indexj">{{child.name}}</el-menu-item>
+              <el-menu-item
+                :index="child.path"
+                v-for="(child, indexj) in item.children"
+                :key="indexj"
+                >{{ child.name }}</el-menu-item
+              >
             </el-submenu>
           </el-menu>
         </el-aside>
         <el-main>
-          <router-view/>
+          <el-breadcrumb separator-class="el-icon-arrow-right" v-if="this.$router.currentRoute.path!='/home'">
+            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
+          </el-breadcrumb>
+          <div class="homeWelcome" v-if="this.$router.currentRoute.path == '/home'">
+            欢迎来到微人事！
+          </div>
+          <router-view />
         </el-main>
       </el-container>
     </el-container>
@@ -46,7 +63,7 @@ export default {
   computed: {
     routes() {
       return this.$store.state.routes;
-    }
+    },
   },
   methods: {
     commandHandler(cmd) {
@@ -59,7 +76,7 @@ export default {
           .then(() => {
             this.getRequest("/logout");
             window.sessionStorage.removeItem("user");
-            this.$store.commit('initRoutes',[]);
+            this.$store.commit("initRoutes", []);
             this.$router.replace("/");
           })
           .catch(() => {
@@ -75,6 +92,15 @@ export default {
 </script>
 
 <style>
+
+.homeWelcome {
+        text-align: center;
+        font-size: 30px;
+        font-family: 华文行楷;
+        color: #409eff;
+        padding-top: 50px;
+    }
+
 .homeHeader {
   background-color: #409eff;
   display: flex;
