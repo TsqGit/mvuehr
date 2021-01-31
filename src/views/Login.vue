@@ -63,15 +63,15 @@ export default {
             // 请求成功，有返回值时
             if (resp) {
               window.sessionStorage.setItem("user",JSON.stringify(resp.obj));
-              this.$router.replace('/home');
-              this.$router
+              let path = this.$route.query.redirect;
+              this.$router.replace((path == '/' || path == undefined) ? '/home' : path);
             }
           })
         } else {
           this.$message({
             message: "请填写完整请求信息！",
             type: "warning",
-          });
+          });          
           return false;
         }
       });
