@@ -17,7 +17,7 @@
         </el-dropdown>
       </el-header>
       <el-container>
-        <el-aside width="200px">
+        <el-aside width="200px" style="text-align:left">
           <el-menu router unique-opened>
             <el-submenu
               :index="index + ''"
@@ -25,7 +25,7 @@
               v-if="!item.hidden"
               :key="index"
             >
-              <template slot="title">
+              <template slot="title" >
                 <i style="color: #409eff;margin-right: 5px" :class="item.iconCls"></i>
                 <span>{{ item.name }}</span>
               </template>
