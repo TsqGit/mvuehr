@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div >
     <el-tabs v-model="activeName" type="card" >
       <el-tab-pane label="部门管理" name="depmana"><DepMana></DepMana></el-tab-pane>
       <el-tab-pane label="职位管理" name="posmana"><PosMana></PosMana></el-tab-pane>
