@@ -19,7 +19,13 @@
       >
     </div>
     <div class="posManaMain">
-      <el-table :data="positions" stripe border style="width: 70%">
+      <el-table
+        :data="positions"
+        stripe
+        border
+        style="width: 70%"
+        @selection-change="handleSelectionChange"
+      >
         <el-table-column type="selection" width="55"> </el-table-column>
         <el-table-column prop="id" label="编号" width="55"> </el-table-column>
         <el-table-column prop="name" label="职位名称" width="250">
@@ -28,7 +34,9 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" @click="showEditView(scope.$index, scope.row)"
+            <el-button
+              size="mini"
+              @click="showEditView(scope.$index, scope.row)"
               >编辑</el-button
             >
             <el-button
@@ -40,16 +48,24 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-button
+        @click="deleteMany"
+        type="danger"
+        size="small"
+        style="margin-top: 8px"
+        :disabled="multipleSelection.length == 0"
+        >批量删除</el-button
+      >
     </div>
 
-    <el-dialog
-      title="职位修改"
-      :visible.sync="dialogVisible"
-      width="30%"
-    >
+    <el-dialog title="职位修改" :visible.sync="dialogVisible" width="30%">
       <div>
         <el-tag>职位名称</el-tag>
-        <el-input class="updatePosInput" size="small" v-model="updatePos.name"></el-input>
+        <el-input
+          class="updatePosInput"
+          size="small"
+          v-model="updatePos.name"
+        ></el-input>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogVisible = false">取 消</el-button>
@@ -71,8 +87,9 @@ export default {
       updatePos: {
         name: "",
       },
+      multipleSelection: [],
       positions: [],
-      dialogVisible: false
+      dialogVisible: false,
     };
   },
   mounted() {
@@ -80,6 +97,33 @@ export default {
   },
 
   methods: {
+    deleteMany() {
+      this.$confirm("此操作将永久删除【"+this.multipleSelection.length+"】条数据, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          let ids = '?';
+          this.multipleSelection.forEach(item => {
+            ids += 'ids=' + item.id + '&';
+          })
+          this.deleteRequest("/system/basic/pos/" + ids).then(resp => {
+            if(resp) {
+              this.initPositions();
+            }
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
     addPosition() {
       if (this.pos.name) {
         this.postRequest("/system/basic/pos/", this.pos).then((resp) => {
@@ -95,17 +139,17 @@ export default {
     showEditView(index, data) {
       // this.updatePos = data;
       // 数据拷贝，防止弹窗修改数据时影响表单数据
-      Object.assign(this.updatePos,data);
+      Object.assign(this.updatePos, data);
       this.dialogVisible = true;
     },
     doUpdate() {
       this.putRequest("/system/basic/pos/", this.updatePos).then((resp) => {
         if (resp) {
           this.initPositions();
-          this.updatePos.name = '';
-          this.dialogVisible = false; 
+          this.updatePos.name = "";
+          this.dialogVisible = false;
         }
-      })
+      });
     },
     handleDelete(index, data) {
       this.$confirm(
@@ -148,10 +192,10 @@ export default {
   margin-right: 8px;
 }
 
-  .updatePosInput {
-      width: 200px;
-      margin-left: 8px;
-  }
+.updatePosInput {
+  width: 200px;
+  margin-left: 8px;
+}
 
 .posManaMain {
   margin-top: 10px;
